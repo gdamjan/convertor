@@ -56,18 +56,20 @@ IT секторот во Македонија проблемот го решил
 
 Структурата на content.xml *упростено* изгледа вака:
 
-<document-content>
-  <automatic-styles>
-    <style name="P1">
-       <text-properties font-name="MAC C Swiss">
-    ...
-    <style name="P2" parent-name="P1">
-  </automatic-styles>
-  <body>
-   <text>
-     <p style-name="P1">jas sum glupa kirilica</p>
-     <p>јас сум ок кирилица <span "P1>glupa<span></p>
-     ...
-   </text>
-  </body>
-</document-content>
+  <document-content>
+    <automatic-styles>
+      <style name="P1">
+         <text-properties font-name="MAC C Swiss">
+      ...
+      <style name="P2" parent-name="P1">
+    </automatic-styles>
+    <body>
+     <text>
+       <p style-name="P1">jas sum glupa kirilica</p>
+       <p>јас сум ок кирилица <span "P1>glupa<span></p>
+       ...
+     </text>
+    </body>
+  </document-content>
+
+http://en.wikipedia.org/wiki/OpenDocument_technical_specification
