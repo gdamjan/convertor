@@ -6,7 +6,8 @@ import lxml.etree
 
 class ODFFile(ZipFile):
     def __init__(self, file, mode='r', compression=0, allowZip64=False):
-        ZipFile.__init__(self, file, mode='r', compression=0, allowZip64=False)
+        ZipFile.__init__(self, file, mode=mode, \
+                compression=compression, allowZip64=allowZip64)
         self.__unchanged = self.namelist()
         self.__updated = {}
 
@@ -25,7 +26,7 @@ class ODFFile(ZipFile):
         # TODO: fails second time called, WHY?
         if fp is None:
             fp = StringIO()
-        zo = ZipFile(fp, mode='w')
+        zo = ZipFile(fp, mode='w', compression=self.compression)
         updated = dict(self.__updated)
         for zinfo in self.infolist():
             name = zinfo.filename
