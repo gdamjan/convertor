@@ -1,25 +1,7 @@
 from functools import partial
 from collections import namedtuple
-import string
 
 from caselessdict import CaselessDict
-
-def build_namespace_tuple(nsmap):
-    keys = []
-    values = []
-    def create_f(x):
-        fmt = '{%s}%%s' % x
-        def f(y):
-            return fmt % y
-        return f
-    for prefix, namespace in nsmap.items():
-        keys.append(prefix) # maybe clean-up prefix first
-        values.append(create_f(namespace))
-    factory = namedtuple('namespaces', " ".join(keys))
-    return factory(*values)
-
-def convert_text(text, variant):
-    return unicode(text).translate(variant)
 
 variant1 = {
     # MAC C Swiss, Macedonian Times...
@@ -100,6 +82,9 @@ variant2.update({
 })
 
 Replacement = namedtuple('Replacement', 'replacement_font convert_func')
+
+def convert_text(text, variant):
+    return unicode(text).translate(variant)
 
 Arial1 = Replacement('Arial', partial(convert_text, variant=variant1))
 Times1 = Replacement('Times', partial(convert_text, variant=variant1))
