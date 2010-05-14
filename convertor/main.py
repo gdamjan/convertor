@@ -1,26 +1,39 @@
-from lxml import etree
-
 from util import the_stupid_fonts, build_namespace_tuple
-from odffile import ODFFile
+
+from lxml import etree
+from zipfile import ZipFile
+from cStringIO import StringIO
 
 # Global sentinels
 INHERIT_CONVERT = object()
 DONT_CONVERT = object()
 NO_PARENT_STYLE = object()
 
-def convert_doc(doc):
+def convert_doc(document_file):
+    '''Given a filename or a file object of a ODT file (a zip file really)
+    returns a converted file object'''
+
+    file_in = ZipFile(document_file)
+    styles = etree.parse(file_in.open('styles.xml'))
+    content = etree.parse(file_in.open('content.xml'))
+
     style_mapping = {}
-
-    styles = doc.get_xml("styles")
     convert_styles(styles, style_mapping)
-
-    content = doc.get_xml("content")
     convert_styles(content, style_mapping)
     convert_content(content, style_mapping)
 
-    doc.set_xml("styles", styles)
-    doc.set_xml("content", content)
-    return
+    # build a new odt file in memory
+    fp = StringIO()
+    file_out = ZipFile(fp, mode='w', compression=file_in.compression)
+    for zinfo in file_in.infolist():
+        name = zinfo.filename
+        if name not in ('styles.xml', 'content.xml'):
+            file_out.writestr(zinfo, file_in.read(zinfo))
+    file_out.writestr('styles.xml', etree.tostring(styles, encoding='utf8'))
+    file_out.writestr('content.xml', etree.tostring(content, encoding='utf8'))
+    file_out.close()
+    return fp
+
 
 def convert_styles(tree, style_mapping):
     '''Iterates through all styles defined in the tree and extracts the

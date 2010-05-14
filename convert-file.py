@@ -16,9 +16,10 @@ def main(files):
     for fn in files:
         try:
             newfn = '-NEW'.join(path.splitext(fn))
-            doc = ODFFile(fn)
-            convert_doc(doc)
-            doc.save_changes(file(newfn, 'w'))
+            buf = convert_doc(fn)
+            fout = open(newfn, 'w')
+            fout.write(buf.getvalue())
+            fout.close()
         except Exception, e:
             print>>sys.stderr, "Can't convert: %s : %s" % (fn, e)
             result = 2
