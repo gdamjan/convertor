@@ -13,7 +13,7 @@ DONT_CONVERT = object()
 NO_PARENT_STYLE = object()
 
 
-def convert_doc(document_file):
+def convert_doc(document_file, out_fp=None):
     '''Given a filename or a file object of a ODT file (a zip file really)
     returns a converted file object'''
 
@@ -27,8 +27,9 @@ def convert_doc(document_file):
     convert_content(content, style_mapping)
 
     # build a new odt file in memory
-    fp = StringIO()
-    file_out = ZipFile(fp, mode='w', compression=file_in.compression)
+    if out_fp is None:
+        out_fp = StringIO()
+    file_out = ZipFile(out_fp, mode='w', compression=file_in.compression)
     for zinfo in file_in.infolist():
         name = zinfo.filename
         if name not in ('styles.xml', 'content.xml'):
@@ -36,7 +37,7 @@ def convert_doc(document_file):
     file_out.writestr('styles.xml', styles.toxml(encoding='utf8'))
     file_out.writestr('content.xml', content.toxml(encoding='utf8'))
     file_out.close()
-    return fp
+    return out_fp
 
 def convert_styles(tree, style_mapping):
     '''Iterates through all styles defined in the tree and extracts the
