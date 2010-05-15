@@ -23,9 +23,10 @@ def application(req):
         file_in = req.files['myfile']
         buf = convert_doc(file_in)
 
+        filename = file_in.filename.replace('.odt', '-converted.odt')
         resp = Response(buf.getvalue())
         resp.content_type = 'application/x-download'
-        resp.headers.add('Content-Disposition', 'attachment', filename='converted.odt')
+        resp.headers.add('Content-Disposition', 'attachment', filename=filename)
         return resp
     return Response(HTML, content_type='text/html')
 

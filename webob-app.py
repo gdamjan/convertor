@@ -24,9 +24,10 @@ def application(req):
         file_in = req.POST['myfile']
         buf = convert_doc(file_in.file)
 
+        filename = file_in.filename.replace('.odt', '-converted.odt')
         resp = Response(buf.getvalue())
         resp.content_type = 'application/x-download'
-        resp.content_disposition = 'attachment; filename=converted.odt'
+        resp.content_disposition = 'attachment; filename=%s' % filename
         return resp
     return Response(HTML, content_type='text/html')
 
