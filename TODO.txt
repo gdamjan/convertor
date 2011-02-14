@@ -1,4 +1,4 @@
-· core: style inheritance
+· core: style inheritance [done]
 · refactor in a proper python package / setup.py
 · project name!!
 
