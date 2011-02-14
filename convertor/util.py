@@ -110,6 +110,7 @@ the_stupid_fonts = CaselessDict({
     'mak_puls_times': Times1,
     'mak_times': Times1,
     'sans_k'     : Arial2,
+    'm_garamond' : Arial2,
     'marial'     : Arial1
 })
 # MAYBE: make it a class ^ .. that parses JSON/YAML
