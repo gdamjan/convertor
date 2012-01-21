@@ -2,7 +2,7 @@ from convertor import convert_doc
 
 from werkzeug import Request, Response
 
-HTML = '''\
+FALLBACK_HTML = '''\
 <HTML>
 <HEAD>
  <TITLE>test</TITLE>
@@ -16,6 +16,10 @@ HTML = '''\
 </HTML>
 '''
 
+try:
+    HTML = open('index.html','rb').read()
+except:
+    HTML = FALLBACK_HTML
 
 @Request.application
 def application(req):
