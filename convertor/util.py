@@ -1,8 +1,11 @@
 from functools import partial
 from collections import namedtuple
-import string
 
-from caselessdict import CaselessDict
+from .caselessdict import CaselessDict
+
+# Python2/3 compatibility
+try: str = unicode
+except: pass
 
 def build_namespace_tuple(nsmap):
     keys = []
@@ -19,7 +22,7 @@ def build_namespace_tuple(nsmap):
     return factory(*values)
 
 def convert_text(text, variant):
-    return unicode(text).translate(variant)
+    return str(text).translate(variant)
 
 variant1 = {
     # MAC C Swiss, Macedonian Times...

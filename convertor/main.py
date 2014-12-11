@@ -1,8 +1,8 @@
-from util import the_stupid_fonts, build_namespace_tuple
+from .util import the_stupid_fonts, build_namespace_tuple
 
 from lxml import etree
 from zipfile import ZipFile
-from cStringIO import StringIO
+from io import StringIO
 
 # Global sentinels
 INHERIT_CONVERT = object()
