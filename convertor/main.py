@@ -2,7 +2,7 @@ from .util import the_stupid_fonts, build_namespace_tuple
 
 from lxml import etree
 from zipfile import ZipFile
-from io import StringIO
+from io import BytesIO
 
 # Global sentinels
 INHERIT_CONVERT = object()
@@ -23,7 +23,7 @@ def convert_doc(document_file):
     convert_content(content, style_mapping)
 
     # build a new odt file in memory
-    fp = StringIO()
+    fp = BytesIO()
     file_out = ZipFile(fp, mode='w', compression=file_in.compression)
     for zinfo in file_in.infolist():
         name = zinfo.filename
@@ -120,16 +120,3 @@ def convert_content(tree, style_mapping):
 
     convert_tree(body, DONT_CONVERT, style_mapping, ns)
     return
-
-
-# pretty_print = lambda el: etree.tostring(el, pretty_print=True)
-# find = lxml.etree.XPath("//b")
-# tree = lxml.etree.parse(StringIO.StringIO(xml))
-# root = tree.getroot()
-# nsmap = root.nsmap
-# tree.xpath('.//style:font-face', namespaces=nsmap)
-# tree.xpath('.//style:text-properties', namespaces=nsmap)
-
-# XPath:
-#   //style:style[style:text-properties[@style:font-name|@style:font-name-complex]]
-#   /office:document-content/office:body/office:text
