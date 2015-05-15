@@ -101,6 +101,15 @@ variant2.update({
     ord('|') :  0x0403,    # CYRILLIC CAPITAL LETTER GJE
     ord('}') :  0x040c,    # CYRILLIC CAPITAL LETTER KJE
 })
+variant3 = dict(variant2)
+# REMOVE SMALL/CAPITAL CHE
+variant3.pop(ord('~'))
+variant3.pop(ord('^'))
+# CHE (ч) е на ; и :
+variant2.update({
+    ord(';') :  0x0447,    # CYRILLIC SMALL LETTER CHE
+    ord(':') :  0x0427,    # CYRILLIC CAPITAL LETTER CHE
+})
 
 Replacement = namedtuple('Replacement', 'replacement_font convert_func')
 
@@ -108,6 +117,7 @@ Arial1 = Replacement('Arial', partial(convert_text, variant=variant1))
 Times1 = Replacement('Times', partial(convert_text, variant=variant1))
 Arial2 = Replacement('Arial', partial(convert_text, variant=variant2))
 Times2 = Replacement('Times', partial(convert_text, variant=variant2))
+Arial3 = Replacement('Arial', partial(convert_text, variant=variant3))
 
 
 # this list needs to be filled with all other fonts
@@ -129,6 +139,7 @@ the_stupid_fonts = CaselessDict({
     'mak_times': Times1,
     'sans_k'     : Arial2,
     'm_garamond' : Arial2,
-    'marial'     : Arial1
+    'marial'     : Arial1,
+    'makarial_beta' : Arial3
 })
 # MAYBE: make it a class ^ .. that parses JSON/YAML
