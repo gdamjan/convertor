@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from __future__ import print_function
 
-from convertor import convert_doc
+from .core import convert_doc
 
 from os import path
 import argparse
@@ -14,10 +14,15 @@ the same directory.
 
 def main():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument("filenames", nargs='+', help="file(s) to convert ", metavar="FILE")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--convert", dest='filenames', nargs='+', help="file(s) to convert", metavar="FILE")
+    group.add_argument("--webapp", action='store_true', help="run a demo web app")
     args = parser.parse_args()
-    result = convert_files(args.filenames)
-    sys.exit(result)
+    if args.webapp:
+        sys.exit(webapp())
+    if args.filenames:
+        result = convert_files(args.filenames)
+        sys.exit(result)
 
 def convert_files(filenames):
     result = 0
@@ -32,6 +37,11 @@ def convert_files(filenames):
             print("Can't convert: %s : %s" % (fname, e), file=sys.stderr)
             result = 2
     return result
+
+def webapp(hostname='localhost', port=5000, use_debugger=False, use_reloader=False):
+    from werkzeug import run_simple
+    from .web_app import application
+    return run_simple(hostname, port, application, use_debugger, use_reloader)
 
 if __name__ == '__main__':
     main()
