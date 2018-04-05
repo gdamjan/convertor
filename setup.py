@@ -44,6 +44,6 @@ setuptools.setup(
     },
     install_requires = ['lxml'],
     extras_require = {
-        "webapp": "Flask"
+        "web": "Werkzeug"
     }
 )
