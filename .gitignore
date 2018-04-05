@@ -2,3 +2,5 @@
 *-info
 tmp/
 html/
+__pycache__/
+build/
