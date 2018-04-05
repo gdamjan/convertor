@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#    XXX - converts ODF files from a YUSCII font-encoding to proper UTF-8.
-#    Copyright (C) 2009 Damjan Georgievski 
+#    "convertor" - converts ODF files from a YUSCII font-encoding to proper UTF-8.
+#    Copyright (C) 2009 Damjan Georgievski
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -14,44 +14,36 @@
 #
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import setuptools
 
-
-'''The setup and build script for the XXX library.'''
 __author__ = 'Damjan Georgievski'
-__version__ = '1.0'
+__version__ = '2.0'
+__email__ = 'gdamjan@gmail.com'
 
-
-# The base package metadata to be used by both distutils and setuptools
-METADATA = dict(
-    name = 'XXX',
+setuptools.setup(
+    name = 'convertor',
     version = __version__,
     author = __author__,
-    author_email = 'gdamjan@gmail.com',
-    description = 'converts ODF files from a YUSCII font-encoding to proper UTF-8',
+    author_email = __email__,
+    description = 'converts ODF files from a YUSCII font-encoding to proper UTF-8 ODF',
     license = 'AGPL 3.0',
     url = 'http://github.com/gdamjan/convertor',
     packages = ['convertor'],
     package_data = {},
     keywords = "ODF",
-)
-
-
-# Extra package metadata to be used only if setuptools is installed
-SETUPTOOLS_METADATA = dict(
-    install_requires = ['lxml'],
     include_package_data = True,
     classifiers = [
+        'Development Status :: 3 - Alpha',
+        'Programming Language :: Python :: 3.6'
     ],
     test_suite = '',
     zip_safe = False,
-    entry_points = """ """
+    entry_points = {
+        'console_scripts':
+            ['convertor=convertor.__main__:main']
+    },
+    install_requires = ['lxml'],
+    extras_require = {
+        "webapp": "Flask"
+    }
 )
-
-# Use setuptools if available, otherwise fallback and use distutils
-try:
-    import setuptools
-    METADATA.update(SETUPTOOLS_METADATA)
-    setuptools.setup(**METADATA)
-except ImportError:
-    import distutils.core
-    distutils.core.setup(**METADATA)
