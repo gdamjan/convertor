@@ -1,5 +1,4 @@
-Опис на проблемот
-=================
+# Опис на проблемот
 
 Во годините кога компјутерите генерално не знаеле да работат со кирилица,
 IT секторот во Македонија проблемот го решиле со креирање на специјални
@@ -36,8 +35,7 @@ IT секторот во Македонија проблемот го решил
 
 
 
-Анализа на ODF документ
-=======================
+# Анализа на ODF документ
 
 Една ODF датотека е всушност zip архива во која се наоѓаат неколку посебни
 датотеки, меѓу кои: самата содржина на документот (content.xml); сликите и
@@ -75,8 +73,7 @@ IT секторот во Македонија проблемот го решил
 http://en.wikipedia.org/wiki/OpenDocument_technical_specification
 
 
-Quick analysis code
-===================
+## Quick analysis code
 
     pretty_print = lambda el: lxml.etree.tostring(el, pretty_print=True)
     find = lxml.etree.XPath("//b")
@@ -92,8 +89,7 @@ Some XPaths:
 
 
 
-Инсталација
-===========
+# Инсталација
 
 
 ```sh
@@ -112,6 +108,7 @@ optional arguments:
 ```
 
 За демо web апликацијата, треба да се инсталира Werkzeug, што е можно и со:
+
 ```
 $ pip install --user git+https://github.com/gdamjan/convertor.git#egg=convertor[web]
 ```
