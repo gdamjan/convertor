@@ -23,6 +23,7 @@ def main():
     if args.filenames:
         result = convert_files(args.filenames)
         sys.exit(result)
+    parser.print_help()
 
 def convert_files(filenames):
     result = 0
