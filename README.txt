@@ -110,3 +110,8 @@ optional arguments:
                         file(s) to convert
   --webapp              run a demo web app
 ```
+
+За демо web апликацијата, треба да се инсталира Werkzeug, што е можно и со:
+```
+$ pip install --user git+https://github.com/gdamjan/convertor.git#egg=convertor[web]
+```
