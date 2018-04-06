@@ -89,3 +89,24 @@ Quick analysis code
 Some XPaths:
 * //style:style[style:text-properties[@style:font-name|@style:font-name-complex]]
 * /office:document-content/office:body/office:text
+
+
+
+Инсталација
+===========
+
+
+```sh
+$ pip install --user git+https://github.com/gdamjan/convertor.git#egg=convertor
+$ .local/bin/convertor --help
+usage: convertor [-h] [--convert FILE [FILE ...] | --webapp]
+
+Convert ODF files from YUSCII to UTF-8. For each file `FILE.odt' will create a
+converted `FILE-NEW.odt' in the same directory.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --convert FILE [FILE ...]
+                        file(s) to convert
+  --webapp              run a demo web app
+```
