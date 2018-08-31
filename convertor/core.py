@@ -94,7 +94,7 @@ def convert_element(el, func):
     return
 
 def convert_tree(tree, inherited_convert, style_mapping, ns):
-   # iterate all direct children
+    # iterate all direct children
     for el in tree:
         style = el.get(ns.text('style-name'))
         if style in style_mapping:
@@ -115,8 +115,8 @@ def convert_content(tree, style_mapping):
     root = tree.getroot()
     ns = build_namespace_tuple(root.nsmap)
 
-    text_path = '/office:document-content/office:body/office:text'
-    body = root.xpath(text_path, namespaces=root.nsmap)
+    body_path = '/office:document-content/office:body'
+    body = root.xpath(body_path, namespaces=root.nsmap)
 
     convert_tree(body, DONT_CONVERT, style_mapping, ns)
     return
