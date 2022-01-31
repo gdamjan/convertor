@@ -1,6 +1,7 @@
 from .core import convert_doc
 
 from werkzeug import Request, Response
+import urllib
 
 HTML = '''\
 <HTML>
@@ -23,6 +24,7 @@ def application(req):
         buf = convert_doc(file_in)
 
         filename = file_in.filename.replace('.odt', '-converted.odt')
+        filename = urllib.parse.quote(filename)
         resp = Response(buf.getvalue())
         resp.content_type = 'application/x-download'
         resp.headers.add('Content-Disposition', 'attachment', filename=filename)
