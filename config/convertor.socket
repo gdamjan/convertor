@@ -1,0 +1,10 @@
+[Unit]
+Description=convertor socket
+
+[Socket]
+ListenStream=/run/convertor.sock
+SocketMode=0660
+SocketGroup=www-data
+
+[Install]
+WantedBy=sockets.target
