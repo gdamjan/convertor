@@ -1,0 +1,18 @@
+[Unit]
+Description=convertor uwsgi service
+After=network.target
+Before=nginx.service
+Requires=convertor.socket
+
+[Service]
+Type=notify
+DynamicUser=yes
+RuntimeDirectory=convertor
+ExecStart=/usr/bin/uwsgi --ini /etc/uwsgi/convertor.ini:service
+ExecReload=/bin/bash -c 'echo w > /run/convertor/master-fifo'
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Also=convertor.socket
