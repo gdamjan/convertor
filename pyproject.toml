@@ -16,7 +16,8 @@ repository = "http://github.com/gdamjan/convertor"
 
 [project.optional-dependencies]
 web = [
-  "Werkzeug",
+    "Werkzeug",
+    "gunicorn>=21.2.0",
 ]
 
 [project.scripts]

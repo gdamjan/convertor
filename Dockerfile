@@ -1,5 +1,7 @@
+ARG PY=3.11
 # build stage
-FROM python:3.11 AS builder
+FROM python:${PY} AS builder
+ARG PY
 
 # install PDM
 RUN pip install -U pip setuptools wheel
@@ -12,19 +14,18 @@ COPY src/ /project/src
 # install dependencies and project into the local packages directory
 WORKDIR /project
 RUN mkdir __pypackages__ && pdm sync --prod --no-editable --group web
-
+RUN mv /project/__pypackages__/$PY/lib /project/pkgs
+RUN mv /project/__pypackages__/$PY/bin /project/bin
 
 # runtime image
-FROM python:3.11-slim
-
-RUN apt-get -y update && \
-    apt-get -y install --no-install-recommends \
-            uwsgi-plugin-python3
+FROM python:${PY}-slim
 
 # retrieve packages from build stage
 ENV PYTHONPATH=/project/pkgs
-COPY --from=builder /project/__pypackages__/3.11/lib /project/pkgs
+COPY --from=builder /project/pkgs /project/pkgs
 
-COPY config/convertor.ini /srv/convertor.ini
+# retrieve executables
+COPY --from=builder /project/bin/* /usr/bin/
 
-ENTRYPOINT ["/usr/bin/uwsgi", "--ini=/srv/convertor.ini:docker"]
+ENV PORT=8000
+ENTRYPOINT ["gunicorn", "convertor.web_app:application"]
