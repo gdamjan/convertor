@@ -53,7 +53,7 @@ IT секторот во Македонија проблемот го решил
 карактеристики од други стилови, па и тоа треба да се има предвид.
 
 Структурата на content.xml *упростено* изгледа вака:
-
+```
   <document-content>
     <automatic-styles>
       <style name="P1">
@@ -69,23 +69,25 @@ IT секторот во Македонија проблемот го решил
      </text>
     </body>
   </document-content>
-
-http://en.wikipedia.org/wiki/OpenDocument_technical_specification
+```
+[http://en.wikipedia.org/wiki/OpenDocument_technical_specification]
 
 
 ## Quick analysis code
 
-    pretty_print = lambda el: lxml.etree.tostring(el, pretty_print=True)
-    find = lxml.etree.XPath("//b")
-    tree = lxml.etree.parse(io.BytesIO(xml))
-    root = tree.getroot()
-    nsmap = root.nsmap
-    tree.xpath('.//style:font-face', namespaces=nsmap)
-    tree.xpath('.//style:text-properties', namespaces=nsmap)
+```
+pretty_print = lambda el: lxml.etree.tostring(el, pretty_print=True)
+find = lxml.etree.XPath("//b")
+tree = lxml.etree.parse(io.BytesIO(xml))
+root = tree.getroot()
+nsmap = root.nsmap
+tree.xpath('.//style:font-face', namespaces=nsmap)
+tree.xpath('.//style:text-properties', namespaces=nsmap)
+```
 
 Some XPaths:
-* //style:style[style:text-properties[@style:font-name|@style:font-name-complex]]
-* /office:document-content/office:body/office:text
+* `//style:style[style:text-properties[@style:font-name|@style:font-name-complex]]`
+* `/office:document-content/office:body/office:text`
 
 
 
@@ -96,7 +98,8 @@ Some XPaths:
 pdm install
 pdm run convertor
 ```
-the output should be:
+
+Резултатот би требало да биде нешто како:
 ```
 usage: convertor [-h] [--convert FILE [FILE ...] | --webapp]
 
@@ -115,3 +118,11 @@ options:
 pdm install -G web
 pdm run gunicorn --reload convertor.web_app:application
 ```
+
+# Docker / podman
+
+```
+podman build . -t convertor
+podman run --rm -it -p 8000:8000 convertor
+```
+(замени podman со docker, ако само тоа имаш)
