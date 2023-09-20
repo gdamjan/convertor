@@ -93,14 +93,16 @@ Some XPaths:
 
 
 ```sh
-$ pip install --user git+https://github.com/gdamjan/convertor.git#egg=convertor
-$ .local/bin/convertor --help
+pdm install
+pdm run convertor
+```
+the output should be:
+```
 usage: convertor [-h] [--convert FILE [FILE ...] | --webapp]
 
-Convert ODF files from YUSCII to UTF-8. For each file `FILE.odt' will create a
-converted `FILE-NEW.odt' in the same directory.
+Convert ODF files from YUSCII to UTF-8. For each file `FILE.odt' will create a converted `FILE-NEW.odt' in the same directory.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --convert FILE [FILE ...]
                         file(s) to convert
@@ -110,5 +112,5 @@ optional arguments:
 За демо web апликацијата, треба да се инсталира Werkzeug, што е можно и со:
 
 ```
-$ pip install --user git+https://github.com/gdamjan/convertor.git#egg=convertor[web]
+pdm install -G web
 ```

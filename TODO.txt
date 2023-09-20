@@ -1,5 +1,4 @@
 · core: style inheritance
-· refactor in a proper python package / setup.py
 · project name!!
 
 · webapp: evaluate other AJAX upload scripts
@@ -12,8 +11,3 @@
 
 · core: test .ods/.odp (spreadsheet, presentation)
 · core: make font map customizeable (threadsafe, so no globals)
-
-· test on Python 2.5 or even 2.4
-· publish on http://pypi.python.org
-· publish on github
-· twitter account?

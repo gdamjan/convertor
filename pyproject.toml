@@ -1,0 +1,39 @@
+[project]
+name = "convertor"
+version = "3.0"
+description = "converts ODF files from a YUSCII font-encoding to proper UTF-8 ODF"
+license = { text = "AGPL-3.0-or-later" }
+requires-python = ">=3.11"
+dependencies = ["lxml"]
+
+[[project.authors]]
+name = "Damjan Georgievski"
+email = "gdamjan@gmail.com"
+
+[project.urls]
+homepage = "http://github.com/gdamjan/convertor"
+repository = "http://github.com/gdamjan/convertor"
+
+[project.optional-dependencies]
+web = [
+  "Werkzeug",
+]
+
+[project.scripts]
+convertor = "convertor.__main__:main"
+
+[tool.pdm.dev-dependencies]
+ci = [
+  "black",
+  "flake8",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+  "tests",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py311']
+include = '\.pyi?$'

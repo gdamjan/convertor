@@ -1,22 +1,30 @@
-FROM debian:buster-slim AS builder
+# build stage
+FROM python:3.11 AS builder
 
-RUN apt-get -y update && \
-    apt-get -y install --no-install-recommends \
-        python3-setuptools python3-wheel python3-pip
+# install PDM
+RUN pip install -U pip setuptools wheel
+RUN pip install pdm
 
-# copy all to /src and install there into PYTHONUSERBASE
-ENV PYTHONUSERBASE=/srv/convertor
-COPY . /src
-RUN pip3 install --user /src/[web]
+# copy files
+COPY pyproject.toml pdm.lock README.md /project/
+COPY src/ /project/src
 
-# Runtime
-FROM debian:buster-slim
+# install dependencies and project into the local packages directory
+WORKDIR /project
+RUN mkdir __pypackages__ && pdm sync --prod --no-editable --group web
+
+
+# runtime image
+FROM python:3.11-slim
+
 RUN apt-get -y update && \
     apt-get -y install --no-install-recommends \
             uwsgi-plugin-python3
 
-ENV PYTHONUSERBASE=/srv/convertor
-COPY --from=builder /srv/convertor /srv/convertor
+# retrieve packages from build stage
+ENV PYTHONPATH=/project/pkgs
+COPY --from=builder /project/__pypackages__/3.11/lib /project/pkgs
+
 COPY config/convertor.ini /srv/convertor.ini
 
 ENTRYPOINT ["/usr/bin/uwsgi", "--ini=/srv/convertor.ini:docker"]
