@@ -1,0 +1,28 @@
+[project]
+name = "convertor"
+version = "4.0.0"
+description = "converts ODF files from a YUSCII font-encoding to proper UTF-8 ODF"
+readme = "README.md"
+license = { text = "AGPL-3.0-or-later" }
+requires-python = ">=3.12"
+dependencies = [
+    "odfpy>=1.4.1",
+]
+
+[[project.authors]]
+name = "Damjan Georgievski"
+email = "gdamjan@gmail.com"
+
+[project.urls]
+homepage = "https://preobrazen.ie.mk/"
+repository = "https://github.com/gdamjan/convertor"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.6.2",
+    "pyright>=1.1.377",
+]
