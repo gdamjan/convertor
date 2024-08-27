@@ -1,9 +1,9 @@
-from .core import convert_file
-
-import sys
+import argparse
 import logging
 import pathlib
-import argparse
+import sys
+
+from .core import convert_file
 
 DESCRIPTION = """\
 Convert Open Document Format (ODF) files from YUSCII to UTF-8.

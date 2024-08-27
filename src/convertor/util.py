@@ -1,5 +1,5 @@
-from types import MappingProxyType
 from dataclasses import dataclass
+from types import MappingProxyType
 
 # MAC C Swiss, Macedonian Times...
 variant1 = MappingProxyType(

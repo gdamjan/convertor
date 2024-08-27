@@ -1,12 +1,12 @@
+from itertools import chain
+from pathlib import Path
+from typing import BinaryIO, Iterator, Union
+
+from odf.element import Element, Text
 from odf.opendocument import load
 from odf.style import Style, TextProperties
-from odf.element import Text, Element
 
 from .util import the_stupid_fonts
-
-from itertools import chain
-from typing import Iterator, Union, BinaryIO
-from pathlib import Path
 
 
 # depth first iterator
