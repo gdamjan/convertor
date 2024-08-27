@@ -46,5 +46,8 @@ jobs:
       - name: Typing checks
         run: uv run pyright
 
+      - name: Tests
+        run: uv run pytest
+
       - name: Minimize uv cache
         run: uv cache prune --ci

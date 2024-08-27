@@ -17,6 +17,9 @@ email = "gdamjan@gmail.com"
 homepage = "https://preobrazen.ie.mk/"
 repository = "https://github.com/gdamjan/convertor"
 
+[project.scripts]
+convertor = "convertor.__main__:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -25,4 +28,5 @@ build-backend = "hatchling.build"
 dev-dependencies = [
     "ruff>=0.6.2",
     "pyright>=1.1.377",
+    "pytest>=8.3.2",
 ]
