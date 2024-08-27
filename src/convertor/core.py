@@ -34,12 +34,11 @@ def get_font_styles(doc):
     for style in all_styles(doc):
         if text_properties := style.getElementsByType(TextProperties):
             if font_name := text_properties[0].getAttribute("fontname"):
-                yield style.getAttribute("name"), font_name
+                yield style.getAttribute("name"), font_name.lower()
 
 
-def filter_font_styles_to_convert(doc):
+def get_font_styles_to_convert(doc):
     for style, font_name in get_font_styles(doc):
-        font_name = font_name.lower()
         if font_name in the_stupid_fonts:
             yield style, the_stupid_fonts[font_name]
 
@@ -60,8 +59,7 @@ def convert_document(doc) -> None:
 
     Mutates the document, so returns None.
     """
-
-    styles = dict(filter_font_styles_to_convert(doc))
+    styles = dict(get_font_styles_to_convert(doc))
 
     for el in saxiter(doc.body):
         if el.__class__ is Text:
