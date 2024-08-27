@@ -1,4 +1,4 @@
-from .core import convert_document
+from .core import convert_file
 
 import sys
 import logging
@@ -37,7 +37,7 @@ def convert_files(input_files: list[pathlib.Path]):
     for p in input_files:
         try:
             output_filename = p.with_stem(f"{p.stem}-NEW")
-            convert_document(p, output_filename)
+            convert_file(p, output_filename)
         except Exception as exc:
             logger.warning(f"Can't convert `{p.absolute()}`", exc_info=True)
             errors.append((p, exc))

@@ -1,50 +1,80 @@
 from odf.opendocument import load
-from odf.text import P, Span
 from odf.style import Style, TextProperties
+from odf.element import Text, Element
 
 from .util import the_stupid_fonts
 
+from itertools import chain
+from typing import Iterator, Union, BinaryIO
+from pathlib import Path
+
+
+# depth first iterator
+def saxiter(node: Element) -> Iterator[Element]:
+    """Return an interator over all elements reachable from node: later siblings and recursively all children."""
+    while node:
+        yield node
+        if node.hasChildNodes():
+            yield from saxiter(node.firstChild)  # type: ignore
+        node = node.nextSibling  # type: ignore
+
+
+def all_styles(doc):
+    return chain(
+        doc.styles.getElementsByType(Style),
+        doc.automaticstyles.getElementsByType(Style),
+    )
+
 
 def get_font_styles(doc):
-    """Retrieve all styles that define text properties in the document."""
-    styles = {}
-    for style in doc.styles.childNodes:
-        if isinstance(style, Style):  # type: ignore
-            text_properties = style.getElementsByType(TextProperties)
-            if text_properties:
-                font_name = text_properties[0].getAttribute("fontname")
-                if font_name:
-                    styles[style.getAttribute("name")] = font_name
-    return styles
+    """Retrieve all styles that define text properties with a font-name in the document.
+
+    returns a dictionary of style-name -> font-name (lower-cased)
+    """
+    for style in all_styles(doc):
+        if text_properties := style.getElementsByType(TextProperties):
+            if font_name := text_properties[0].getAttribute("fontname"):
+                yield style.getAttribute("name"), font_name
 
 
-def convert_text_nodes(doc):
-    """Find all text nodes using the specified font and replace them with uppercase text."""
-    styles = get_font_styles(doc)
-
-    for paragraph in doc.getElementsByType(P):
-        for span in paragraph.getElementsByType(Span):
-            style_name = span.getAttribute("stylename")
-
-            if not style_name:
-                return
-            if not (orig_font := styles.get(style_name)):
-                return
-            if orig_font.lower() in the_stupid_fonts:
-                orig_text = span.text
-                conversion = the_stupid_fonts[orig_font]
-                span.text = conversion.convert(orig_text)
-                style_element = doc.styles.getElementsByType(Style, name=style_name)[0]
-                text_properties = style_element.getElementsByType(TextProperties)[0]
-                text_properties.setAttribute("fontname", conversion.target_font)
+def filter_font_styles_to_convert(doc):
+    for style, font_name in get_font_styles(doc):
+        font_name = font_name.lower()
+        if font_name in the_stupid_fonts:
+            yield style, the_stupid_fonts[font_name]
 
 
-def convert_document(file, output_filename):
-    # Load the ODT document
+def convert_styles(doc):
+    for style in all_styles(doc):
+        if text_properties := style.getElementsByType(TextProperties):
+            text_properties = text_properties[
+                0
+            ]  # there's only one TextProperties in style
+            if font_name := text_properties.getAttribute("fontname"):
+                if conversion := the_stupid_fonts.get(font_name.lower()):
+                    text_properties.setAttribute("fontname", conversion.target_font)
+
+
+def convert_document(doc) -> None:
+    """Find all text nodes using the specified font and replace them with unicode text.
+
+    Mutates the document, so returns None.
+    """
+
+    styles = dict(filter_font_styles_to_convert(doc))
+
+    for el in saxiter(doc.body):
+        if el.__class__ is Text:
+            style = el.parentNode.getAttribute("stylename")  # type: ignore
+            if conversion := styles.get(style):
+                el.data = conversion.convert(el.data)  # type: ignore
+
+    convert_styles(doc)
+
+
+def convert_file(
+    file: Union[str, BinaryIO, Path], output_filename: Union[str, Path]
+) -> None:
     doc = load(file)
-
-    # Replace all text using the Arial font with its uppercase version
-    convert_text_nodes(doc)
-
-    # Save the modified document
+    convert_document(doc)
     doc.save(output_filename)
