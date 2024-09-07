@@ -18,7 +18,7 @@ homepage = "https://preobrazen.ie.mk/"
 repository = "https://github.com/gdamjan/convertor"
 
 [project.scripts]
-convertor = "convertor.__main__:main"
+convertor = "convertor.cli:main"
 
 [build-system]
 requires = ["hatchling"]
