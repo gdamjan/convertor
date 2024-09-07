@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from odf.opendocument import load
 
-from convertor.core import convert_document
+from convertor.convert_odf import convert_document, get_font_styles
 
 unicode_pangram = (
     "Желката Љуба музицира на харфа читајќи го Његош, а песот Ѓоше се џари во ѕвезди."
@@ -12,9 +12,14 @@ unicode_pangram = (
 
 @pytest.fixture
 def simple_example():
-    example_file = Path(__file__).with_name("simple-example.odt")
+    example_file = Path(__file__).parent / "fixtures" / "simple-example.odt"
     doc = load(example_file)
     return doc
+
+
+def test_simple_num_styles(simple_example):
+    styles = dict(get_font_styles(simple_example))
+    assert len(styles) == 2
 
 
 def test_simple_baseline(simple_example):

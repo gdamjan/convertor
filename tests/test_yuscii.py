@@ -1,4 +1,4 @@
-from convertor.util import variant1, variant2, variant3
+from convertor.yuscii import variant1, variant2, variant3
 
 cyrillics_lower = "абвгдѓежзѕијклљмнњопрстќуфхцчџш"
 cyrillics_upper = cyrillics_lower.upper()

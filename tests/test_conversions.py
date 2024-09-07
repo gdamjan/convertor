@@ -1,4 +1,4 @@
-from convertor.util import the_stupid_fonts
+from convertor.yuscii import the_stupid_fonts
 
 unicode_pangram = (
     "Желката Љуба музицира на харфа читајќи го Његош, а песот Ѓоше се џари во ѕвезди."
@@ -11,7 +11,7 @@ def test_mac_c_swiss():
 
     conversion = the_stupid_fonts[yuscii_font]
     assert conversion.convert(yuscii_text) == unicode_pangram
-    assert conversion.target_font == "Arial"
+    assert conversion.replacement_font == "Arial"
 
 
 def test_makedonski_tajms():
@@ -20,7 +20,7 @@ def test_makedonski_tajms():
 
     conversion = the_stupid_fonts[yuscii_font]
     assert conversion.convert(yuscii_text) == unicode_pangram
-    assert conversion.target_font == "Times"
+    assert conversion.replacement_font == "Times"
 
 
 def test_sans_k():
@@ -29,7 +29,7 @@ def test_sans_k():
 
     conversion = the_stupid_fonts[yuscii_font]
     assert conversion.convert(yuscii_text) == unicode_pangram
-    assert conversion.target_font == "Arial"
+    assert conversion.replacement_font == "Arial"
 
 
 def test_maksans_beta():
@@ -38,4 +38,4 @@ def test_maksans_beta():
 
     conversion = the_stupid_fonts[yuscii_font]
     assert conversion.convert(yuscii_text) == unicode_pangram
-    assert conversion.target_font == "Arial"
+    assert conversion.replacement_font == "Arial"
