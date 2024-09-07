@@ -1,4 +1,4 @@
-from convertor.util import variant1, variant2, variant3
+from convertor.yuscii import variant1, variant2, variant3
 
 cyrillics_lower = "абвгдѓежзѕијклљмнњопрстќуфхцчџш"
 cyrillics_upper = cyrillics_lower.upper()
@@ -18,9 +18,7 @@ def test_cyrillic_constant_all_uppercase():
 
 
 def test_cyrillic_constant_uniqueness():
-    assert (
-        len(set(cyrillics_lower)) == len(cyrillics_lower) == len(set(cyrillics_upper))
-    )
+    assert len(set(cyrillics_lower)) == len(cyrillics_lower) == len(set(cyrillics_upper))
 
 
 def test_variants_lengths():
@@ -36,9 +34,7 @@ def test_variant_values():
         assert chars == set(cyrillics)
 
 
-unicode_pangram = (
-    "Желката Љуба музицира на харфа читајќи го Његош, а песот Ѓоше се џари во ѕвезди."
-)
+unicode_pangram = "Желката Љуба музицира на харфа читајќи го Његош, а песот Ѓоше се џари во ѕвезди."
 
 
 def test_pangram_is_complete():
