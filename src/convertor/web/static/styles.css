@@ -1,0 +1,146 @@
+:root {
+    /* TODO: parametrize with variables */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100svh;
+    align-content: center;
+    font-family: sans-serif;
+    background-color: #f0f4f9;
+    color: #333;
+}
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #666;
+    text-shadow: 1px 1px 2px #aaa;
+}
+
+a {
+    color: #3377c0;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+        color: #2f6cb6;
+    }
+}
+#drop-area {
+    img {
+        margin-top: 1em;
+        height: 70%;
+    }
+    div.info {
+        opacity: 60%;
+    }
+    width: 400px;
+    height: 200px;
+    margin: 20px auto;
+    text-align: center;
+    user-select: none;
+    border: 4px dashed #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: white;
+    &.drag-over {
+        background-color: #eee;
+        border-style: solid;
+    }
+    &.drag-reject {
+        background-color: #eee;
+        border-color: red;
+    }
+}
+
+/* file list item goes from not-ready, to ready, to upload-in-progress (when clicked), to success or error */
+#file-list-container {
+    text-align: center;
+    div.not-ready {
+        color: gray;
+        cursor: progress;
+    }
+    div.ready {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    /* TODO better in-progress styling */
+    div.upload-in-progress {
+        text-decoration: none;
+        cursor: progress;
+    }
+    div.success {
+        color: gray;
+        text-decoration: none;
+        &::after {
+            content: " ✓";
+        }
+    }
+    div.error {
+        color: gray;
+        text-decoration-line: line-through;
+        &:after {
+            content: " ✗";
+        }
+    }
+}
+
+/** Help Button & Dialog */
+#help-fab {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    margin: 10px 10px;
+    button {
+        position: absolute;
+        cursor: pointer;
+        height: 30px;
+        width: 30px;
+        font-weight: bold;
+        color: black;
+        border: none;
+        border-radius: 30%;
+        box-shadow: 10px 10px 18px 5px rgba(0, 0, 0, 0.2);
+        background: #f3f9f0;
+        &:hover {
+            background: #92ff6b;
+        }
+    }
+}
+
+#help-dialog {
+    width: 80vw;
+    height: 80vh;
+    font-size: 0.875rem;
+    button.close {
+        all: unset;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+        opacity: 0.5;
+        &:hover {
+            opacity: 1;
+            background-color: #eee;
+        }
+    }
+    h1 {
+        text-align: left;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        &::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            margin-top: 0.25rem;
+            margin-left: 1rem;
+            background: #e5e5e5;
+        }
+    }
+}
