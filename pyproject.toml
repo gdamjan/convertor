@@ -20,6 +20,12 @@ repository = "https://github.com/gdamjan/convertor"
 [project.scripts]
 convertor = "convertor.__main__:main"
 
+[project.optional-dependencies]
+web = [
+    "granian>=1.6.1",
+    "starlette>=0.41.0",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

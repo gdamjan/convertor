@@ -96,7 +96,7 @@ variant3 = MappingProxyType(
 
 @dataclass(frozen=True)
 class Conversion:
-    target_font: str
+    replacement_font: str
     variant: MappingProxyType
 
     def convert(self, text):
