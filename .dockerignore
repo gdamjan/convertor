@@ -1,0 +1,6 @@
+# don't send local dev files to docker context
+Dockerfile
+__pycache__/
+*.pyc
+*.pyo
+.*
