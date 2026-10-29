@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Конвертор</title>
+        <script src="script.js" type="module"></script>
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="icon" href="favicon.webp" />
+        <link rel="manifest" href="manifest.json" />
+    </head>
+    <body>
+        <h1>Конвертор</h1>
+        <div id="drop-area">
+            <img src="upload.svg" title="Drop .odt files here" />
+            <div class="info">Drop .odt files here</div>
+        </div>
+        <input
+            type="file"
+            id="file-input"
+            multiple
+            hidden
+            accept=".odt, application/vnd.oasis.opendocument.text"
+        />
+        <div id="file-list-container"></div>
+        <div id="help-fab"><button title="help">?</button></div>
+        <dialog id="help-dialog">
+            <button title="Close" class="close">x</button>
+            <header><h1>HELP</h1></header>
+            <p>
+                Project homepage:<br />
+                <a href="https://github.com/gdamjan/convertor"
+                    >https://github.com/gdamjan/convertor</a
+                >
+            </p>
+            <p>
+                Discussions:<br />
+                <a href="https://github.com/gdamjan/convertor/discussions"
+                    >https://github.com/gdamjan/convertor/discussions</a
+                >
+            </p>
+            <p>
+                Wiki:<br />
+                <a href="https://github.com/gdamjan/convertor/wiki"
+                    >https://github.com/gdamjan/convertor/wiki</a
+                >
+            </p>
+        </dialog>
+    </body>
+</html>
