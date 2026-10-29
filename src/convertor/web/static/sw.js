@@ -1,12 +1,14 @@
 // service worker to populate the offline first cache
 //
+// paths are relative to the service worker, so it works under a sub-path like GitHub Pages
 const cacheId = "v1";
 const cacheResources = [
-  "/",
-  "/index.html",
-  "/styles.css",
-  "/script.js",
-  "/upload.svg",
+  "./",
+  "index.html",
+  "styles.css",
+  "script.js",
+  "worker.js",
+  "upload.svg",
 ];
 
 async function addResourcesToCache(resources, cacheId) {

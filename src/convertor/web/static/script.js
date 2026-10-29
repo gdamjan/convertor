@@ -39,27 +39,94 @@ function handleFileAdd(files) {
 }
 
 /**
+ * Where to convert: on the server by default, or in the browser with Pyodide
+ * when the site ships the python wheels (the static site, e.g. GitHub Pages).
+ * @type {Promise<"server" | "wasm">}
+ */
+const backend = fetch("wheels/wheels.json", { method: "HEAD" }).then(
+  (resp) => (resp.ok ? "wasm" : "server"),
+  () => "server",
+);
+
+/**
+ * The in-browser conversion runs in Pyodide inside a Web Worker.
+ * It's only started in wasm mode, as it downloads the whole python runtime.
+ * @type {Worker | undefined}
+ */
+let worker;
+let nextId = 0;
+/** @type {Map<number, {resolve: (result: Uint8Array<ArrayBuffer>) => void, reject: (error: string) => void}>} */
+const pending = new Map();
+
+function getWorker() {
+  if (worker === undefined) {
+    worker = new Worker("worker.js", { type: "module" });
+    worker.addEventListener("message", (/** @type {MessageEvent} */ ev) => {
+      const { id, result, error } = ev.data;
+      const request = pending.get(id);
+      if (request === undefined) return;
+      pending.delete(id);
+      error === undefined ? request.resolve(result) : request.reject(error);
+    });
+  }
+  return worker;
+}
+
+// in wasm mode, start loading python right away, while the user picks files
+backend.then((b) => b === "wasm" && getWorker());
+
+/**
+ * @param {ArrayBuffer} fileContent
+ * @returns {Promise<Blob>}
+ */
+async function convertInWorker(fileContent) {
+  const id = nextId++;
+  /** @type {Uint8Array<ArrayBuffer>} */
+  const result = await new Promise((resolve, reject) => {
+    pending.set(id, { resolve, reject });
+    // copy, so the file can be converted again
+    getWorker().postMessage({ id, content: fileContent.slice(0) });
+  });
+  return new Blob([result], {
+    type: "application/vnd.oasis.opendocument.text",
+  });
+}
+
+/**
+ * @param {ArrayBuffer} fileContent
+ * @returns {Promise<Blob>}
+ */
+async function convertOnServer(fileContent) {
+  const resp = await fetch("upload", { method: "PUT", body: fileContent });
+  if (!resp.ok) {
+    throw new Error(`server error ${resp.status}`);
+  }
+  return await resp.blob();
+}
+
+/**
+ * @param {ArrayBuffer} fileContent
+ * @returns {Promise<Blob>}
+ */
+async function convert(fileContent) {
+  return (await backend) === "wasm"
+    ? await convertInWorker(fileContent)
+    : await convertOnServer(fileContent);
+}
+
+/**
  * @param {string} fileName
  * @param {ArrayBuffer} fileContent
- * @returns boolean
+ * @returns {Promise<boolean>}
  */
 async function convertFile(fileName, fileContent) {
-  const req = new Request("/upload", {
-    method: "PUT",
-    body: fileContent,
-  });
   try {
-    const resp = await fetch(req);
-    if (!resp.ok) {
-      console.log(resp.status);
-      return false;
-    }
-    const blob = await resp.blob();
+    const blob = await convert(fileContent);
     const blobUrl = window.URL.createObjectURL(blob);
     // create fake link and initiate download
     const a = document.createElement("a");
     a.href = blobUrl;
-    a.download = fileName;
+    a.download = fileName.replace(/(\.odt)?$/i, "-NEW.odt");
     a.click();
     return true;
   } catch (exc) {
@@ -160,9 +227,8 @@ document.addEventListener("keydown", function (ev) {
  */
 if ("serviceWorker" in navigator) {
   try {
-    const registration = await navigator.serviceWorker.register("/sw.js", {
-      scope: "/",
-    });
+    // relative paths, so it works under a sub-path like GitHub Pages
+    const registration = await navigator.serviceWorker.register("sw.js");
     if (registration.installing) {
       console.log("Service worker for offline use - installing");
     } else if (registration.waiting) {
