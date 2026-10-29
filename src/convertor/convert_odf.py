@@ -32,24 +32,21 @@ def get_font_styles(doc: OpenDocument):
 
     returns a dictionary of style-name -> font-name (lower-cased)
     """
-    # TODO: cache the full style object
-    styles_cache = {}
+    # style-name -> resolved font-name, so children can inherit from their parent
+    fonts_cache: dict[str, str] = {}
     for style in all_styles(doc):
         style_name = style.getAttribute("name")
-        styles_cache |= {style_name: style}
         if (text_properties := style.getElementsByType(TextProperties)) and (
             font_name := text_properties[0].getAttribute("fontname")
         ):
             font_name = font_name.lower()
+            fonts_cache[style_name] = font_name
             yield style_name, font_name
         elif parent := style.getAttribute("parentstylename"):
-            # FIXME: there can be multiple levels of parents
-            # print(f"{style_name} -> {parent}")
-            if parent in styles_cache:
-                yield (
-                    style.getAttribute("name"),
-                    styles_cache[parent].getAttribute("fontname"),
-                )
+            # FIXME: only works if the parent style is defined before the child
+            if font_name := fonts_cache.get(parent):
+                fonts_cache[style_name] = font_name
+                yield style_name, font_name
         else:
             # style with no parent-style, no text-properties or no fontname in the text-properties
             pass
