@@ -1,6 +1,7 @@
+from collections.abc import Iterator
 from itertools import chain
 from pathlib import Path
-from typing import BinaryIO, Iterator, Union
+from typing import BinaryIO
 
 from odf.element import Element, Text
 from odf.opendocument import OpenDocument, load
@@ -94,16 +95,14 @@ def convert_document(doc: OpenDocument) -> None:
     for el in saxiter(doc.body):
         if el.__class__ is Text and el.parentNode.tagName.startswith("text:"):  # type: ignore[reportAttributeAccessIssue]
             # FIXME: we need to track the style of the parent text node too
-            style = el.parentNode.getAttribute("stylename")  # type: ignore
+            style = el.parentNode.getAttribute("stylename")
             if conversion := styles.get(style):
-                el.data = conversion.convert(el.data)  # type: ignore
+                el.data = conversion.convert(el.data)
 
     convert_styles(doc)
 
 
-def convert_file(
-    file: Union[str, BinaryIO, Path], output_filename: Union[str, Path]
-) -> None:
+def convert_file(file: str | BinaryIO | Path, output_filename: str | Path) -> None:
     doc = load(file)
     convert_document(doc)
     doc.save(output_filename)

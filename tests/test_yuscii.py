@@ -10,11 +10,11 @@ def test_cyrillic_constant_length():
 
 
 def test_cyrillic_constant_all_lowercase():
-    assert all(map(lambda c: c.islower(), cyrillics_lower))
+    assert all(c.islower() for c in cyrillics_lower)
 
 
 def test_cyrillic_constant_all_uppercase():
-    assert all(map(lambda c: c.isupper(), cyrillics_upper))
+    assert all(c.isupper() for c in cyrillics_upper)
 
 
 def test_cyrillic_constant_uniqueness():
@@ -32,7 +32,7 @@ def test_variants_lengths():
 def test_variant_values():
     """Each variant must cover all cyrillic characters, small and CAPITAL"""
     for v in (variant1, variant2, variant3):
-        chars = set(chr(c) for c in v.values())
+        chars = {chr(c) for c in v.values()}
         assert chars == set(cyrillics)
 
 
